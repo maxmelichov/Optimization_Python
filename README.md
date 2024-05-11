@@ -11,7 +11,7 @@ This repository contains Python implementations of numerical optimization algori
 To get started with the optimization tests and view results:
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/maxmelichov/optimization-hw1.git
    ```
 2. Execute the test script:
    ```
