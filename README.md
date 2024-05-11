@@ -47,7 +47,7 @@ Focuses on a specialized Boyd’s quadratic function, testing edge cases in opti
 - **Output Visuals**:
   - ![Boyd's Function Contours](plots/Boyd/boyd_plot.png)
 
-  - ![Boyd's Function Iterations](plots\Boyd's\iteration.png)
+  - ![Boyd's Function Iterations](plots\Boyd\iteration.png)
 
 ### 5. Rosenbrock Function
 A classic optimization test function used to evaluate convergence properties of the methods.
