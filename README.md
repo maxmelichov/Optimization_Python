@@ -1,43 +1,68 @@
-This project is focused on implementing and evaluating numerical optimization techniques in Python, specifically targeting unconstrained minimization problems. The core algorithms implemented include Gradient Descent and Newton's Method, accompanied by robust line search strategies to ensure optimal step sizes.
+# Numerical Optimization of Unconstrained Functions
 
-Repository Structure
-src/: Contains the core modules for the optimization algorithms and utility functions.
-tests/: Includes test modules that apply the optimization algorithms to a variety of test functions and plots the results.
-Installation and Usage
-Clone the repository using:
+## Project Overview
+This repository contains Python implementations of numerical optimization algorithms designed for unconstrained minimization problems. The primary focus is on Gradient Descent and Newton's Method, enhanced with robust line search techniques to determine optimal step sizes effectively.
 
-bash
-Copy code
-git clone https://github.com/your-username/your-repository.git
-To run the optimization tests and visualize the function minimizations, navigate to the project directory and execute:
+## Repository Structure
+- **src/**: Houses core modules that implement the optimization algorithms and auxiliary utility functions.
+- **tests/**: Contains test scripts that apply the optimization techniques across various function scenarios and generate visual outputs for analysis.
 
-bash
-Copy code
-python test_unconstrained_min.py
-Implemented Functions
-The optimization algorithms are tested on various functions including quadratic forms and the Rosenbrock function. Detailed explanations and visual results for each test case are provided below:
+## Installation and Usage
+To get started with the optimization tests and view results:
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/your-repository.git
+   ```
+2. Execute the test script:
+   ```
+   python test_unconstrained_min.py
+   ```
 
-1. Quadratic Function: Circle
-This function tests the basic behavior of both algorithms on a simple quadratic function with a circular level set.
-[plot_contours]("plots\Circle\circle plot.png")
-[iteration]("plots\Circle\Figure_1.png")
+## Implemented Functions
+The algorithms are rigorously tested on multiple function types, including quadratic forms and the Rosenbrock function. Descriptions and visual results for each scenario are outlined below:
 
-2. Quadratic Function: Ellipce
+### 1. Quadratic Function: Circle
+Tests basic algorithm behavior on a simple quadratic function with circular level sets.
+- **Output Visuals**:
+  - ![Circle Function Contours](plots/Circle/circle_plot.png)
+  - ![Circle Function Iterations](plots/Circle/Figure_1.png)
 
-3. Quadratic Function: Contour
+### 2. Quadratic Function: Ellipse
+Demonstrates the algorithms' performance on an elliptical quadratic function, emphasizing behavior on elongated level sets.
+- **Output Visuals**:
+  - ![Ellipse Function Contours](plots/Ellipse/ellipse_plot.png)
+  - ![Ellipse Function Iterations](plots/Ellipse/Figure_1.png)
 
+### 3. Quadratic Function: Contour
+Further explores optimization paths on various contour configurations.
+- **Output Visuals**:
+  - ![Contour Function Plots](plots/Contour/contour_plot.png)
+  - ![Contour Function Iterations](plots/Contour/Figure_1.png)
 
-4. Quadratic Function: Boyd's
-Evaluates the algorithms on an elliptical quadratic function, highlighting their behavior on elongated level sets.
-[plot_contours]("plots\Circle\circle plot.png")
-[iteration]("plots\Circle\Figure_1.png")
+### 4. Quadratic Function: Boyd's
+Focuses on a specialized Boyd’s quadratic function, testing edge cases in optimization.
+- **Output Visuals**:
+  - ![Boyd's Function Contours](plots/Boyd/boyd_plot.png)
+  - ![Boyd's Function Iterations](plots/Boyd/Figure_1.png)
 
+### 5. Rosenbrock Function
+A classic optimization test function used to evaluate convergence properties of the methods.
+- **Output Visuals**:
+  - ![Rosenbrock Function Contours](plots/Rosenbrock/rosenbrock_plot.png)
+  - ![Rosenbrock Function Iterations](plots/Rosenbrock/Figure_1.png)
 
-5. Rosenbrock Function
-A classic test function for optimization algorithms, used here to demonstrate the convergence characteristics of the implemented methods.
-[plot_contours]("plots\Circle\circle plot.png")
-[iteration]("plots\Circle\Figure_1.png")
+## Discussion
+Newton's Method typically achieves faster convergence leveraging second-order information, albeit at the cost of higher computational demand and challenges with nearly singular Hessians. Gradient Descent, a first-order method, provides more consistent results across a broader range of conditions, though it may be slower, requiring more iterations for comparable precision.
 
+## Contributions and Licensing
+Contributions are welcome! Please review CONTRIBUTING.md for how to contribute effectively. This project is distributed under the MIT License.
 
-Discussion
-Newton's Method generally achieves faster convergence due to its use of second-order information. However, it requires the computation of the Hessian matrix, which can be computationally expensive and problematic in cases where the Hessian is nearly singular. Gradient Descent, using only first-order derivatives, is more robust in such scenarios but may require more iterations to converge.
+## Contact Information
+For more information or queries, reach out to [Your Name] at [your-email@example.com].
+
+## Acknowledgments
+Thanks to all project contributors and users. Your insights and contributions significantly enhance the quality and utility of this optimization toolkit.
+
+---
+
+Please adjust the links to plots and personal details as necessary. This version aims to provide a clear and professional presentation of your project while maintaining consistency in style and format.
