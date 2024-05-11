@@ -24,7 +24,7 @@ The algorithms are rigorously tested on multiple function types, including quadr
 ### 1. Quadratic Function: Circle
 Tests basic algorithm behavior on a simple quadratic function with circular level sets.
 - **Output Visuals**:
-  - ![Circle Function Contours](plots/Circle/circle plot.png)
+  - ![Circle Function Contours](plots/Circle/circle_plot.png)
 
   - ![Circle Function Iterations](plots/Circle/Figure_1.png)
 
@@ -45,14 +45,14 @@ Further explores optimization paths on various contour configurations.
 ### 4. Quadratic Function: Boyd's
 Focuses on a specialized Boyd’s quadratic function, testing edge cases in optimization.
 - **Output Visuals**:
-  - ![Boyd's Function Contours](plots/Boyd/boyd's plot.png)
+  - ![Boyd's Function Contours](plots/Boyd/boyd_plot.png)
 
   - ![Boyd's Function Iterations](plots\Boyd's\iteration.png)
 
 ### 5. Rosenbrock Function
 A classic optimization test function used to evaluate convergence properties of the methods.
 - **Output Visuals**:
-  - ![Rosenbrock Function Contours](plots/Rosenbrock/rosenbrock plot.png)
+  - ![Rosenbrock Function Contours](plots/Rosenbrock/rosenbrock_plot.png)
 
   - ![Rosenbrock Function Iterations](plots/Rosenbrock/iteration.png)
 
