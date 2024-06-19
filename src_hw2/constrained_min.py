@@ -2,98 +2,85 @@ import numpy as np
 import math
 
 
-def interior_pt(f, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, x0):
-    path_history = dict(path=[], values=[])
-    t = 1
+def interior_pt(f, ineq_constraints, eq_constraints_mat, x0):
+    path_history = {'path': [], 'values': []}
+    t = 1.0
+    prev_x = x0.copy()
+    path_history['path'].append(prev_x)
+    path_history['values'].append(f(prev_x)[0])
 
-    # Get initial function value, gradient, and Hessian using the logarithmic barrier approach
-    current_f_value, current_gradient, current_hessian = get_values_after_log_barrier(f, ineq_constraints, x0, t)
+    prev_f, prev_grad, prev_hass = get_values_after_log_barrier(f, ineq_constraints, x0, t)
     
-    # Store initial values
-    current_point = x0
-    path_history['path'].append(current_point.copy())
-    path_history['values'].append(f(current_point.copy())[0])
+    num_of_constraints = len(ineq_constraints)
+    prev_x0 = x0
 
-    # Continue iterations until the ratio of the number of constraints to t is small enough
-    while (len(ineq_constraints) / t) > 1e-8:
-        for _ in range(10):
-            # Calculate the descent direction
-            direction = find_direction(current_hessian, eq_constraints_mat, current_gradient)
-            # Find step length using the Wolfe conditions with backtracking
-            step_length = wolfe_condition_with_backtracking(f, current_point, current_f_value, current_gradient, direction, ineq_constraints, t)
-            # Update the point
-            next_point = current_point + direction * step_length
+    path_history['path'].append(prev_x0.copy())
+    path_history['values'].append(f(prev_x0.copy())[0])
+
+    while (num_of_constraints / t) > 1e-8:
+        for i in range(10):
+            dir = find_direction(prev_hass, eq_constraints_mat, prev_grad)
+            step_len = wolfe_condition_with_backtracking(f, prev_x0, prev_f, prev_grad, dir)
+            next_x0 = prev_x0 + dir * step_len
             
-            # Update function value, gradient, and Hessian
-            next_f_value, next_gradient, next_hessian = get_values_after_log_barrier(f, ineq_constraints, next_point, t)
+            next_f, next_grad, next_hass = get_values_after_log_barrier(f, ineq_constraints, next_x0, t)
 
-            # Check for convergence using the stopping criterion based on the lambda value
-            lambda_value = np.sqrt(np.dot(direction, np.dot(next_hessian, direction.T)))
-            if 0.5 * (lambda_value ** 2) < 1e-8:
+            if np.linalg.norm(next_grad, 2) ** 2 * 0.5 < 1e-8:
                 break
 
-            # Update the current estimates
-            current_point = next_point
-            current_f_value = next_f_value
-            current_gradient = next_gradient
-            current_hessian = next_hessian
+            prev_x0 = next_x0
+            prev_f = next_f
+            prev_grad = next_grad
+            prev_hass = next_hass
         
-        # Update path history after completing inner loop iterations
-        path_history['path'].append(current_point.copy())
-        path_history['values'].append(f(current_point.copy())[0])
-        t *= 10  # Increase the barrier parameter
+        path_history['path'].append(prev_x0.copy())
+        path_history['values'].append(f(prev_x0.copy())[0])
+        t *= 10
     
-    # Return the final point, function value at that point, and the path history
-    return current_point, f(current_point.copy())[0], path_history
+    return prev_x0, f(prev_x0.copy())[0], path_history
 
 
-def log_barrier(inequality_constraints, x0):
-    # Determine the dimensionality of x0
+def log_barrier(ineq_constraints, x0):
     x0_dim = x0.shape[0]
-    # Initialize the log barrier function value, gradient, and Hessian
-    log_barrier_value = 0
-    log_barrier_gradient = np.zeros(x0_dim)
-    log_barrier_hessian = np.zeros((x0_dim, x0_dim))
+    log_f = 0
+    log_g = np.zeros((x0_dim))
+    log_h = np.zeros((x0_dim, x0_dim))
 
-    # Iterate over each inequality constraint
-    for constraint in inequality_constraints:
-        f_value, gradient, hessian = constraint(x0)
-        
-        # Update the log barrier function value
-        log_barrier_value += np.log(-f_value)
-        # Update the gradient of the log barrier
-        log_barrier_gradient += gradient / -f_value
-        
-        # Precompute the outer product of normalized gradient for Hessian update
-        normalized_gradient = gradient / f_value
-        outer_product = np.outer(normalized_gradient, normalized_gradient)
-        
-        # Update the Hessian of the log barrier
-        log_barrier_hessian += (hessian / f_value - outer_product) / f_value
+    for constraint in ineq_constraints:
+        f, g, h = constraint(x0)
+        inv_f = -1.0 / f
+        log_f += math.log(-f)
+        log_g += inv_f * g
+
+        grad = g / f
+        grad_dim = grad.shape[0]
+        grad_tile = np.tile(grad.reshape(grad_dim, -1), (1, grad_dim)) * np.tile(grad.reshape(grad_dim, -1).T, (grad_dim, 1))
+        log_h += (h * f - grad_tile) / f ** 2
     
-    # Return the negative of the log barrier function, gradient, and Hessian
-    return -log_barrier_value, log_barrier_gradient, -log_barrier_hessian
+    return -log_f, log_g, -log_h
 
 
-def find_direction_eq(previous_hessian, A, previous_gradient):
-    left_matrix = np.block([
-        [previous_hessian, A.T],   # Top half: Hessian and transpose of Jacobian
-        [A, np.zeros((A.shape[0], A.shape[0]))]  # Bottom half: Jacobian and zero matrix
+def find_direction_eq(previous_hessian, A, previous_gradiant):
+    num_constraints = A.shape[0]
+
+    # Construct the KKT matrix
+    kkt_matrix = np.block([
+        [previous_hessian, A.T],
+        [A, np.zeros((num_constraints, num_constraints))]
     ])
-    # Construct the right-hand side vector, considering the negative gradient and zero padding
-    right_vector = np.concatenate([-previous_gradient, np.zeros(A.shape[0])])
 
-    # Solve the linear system to find the primal and dual variables
-    solution = np.linalg.solve(left_matrix, right_vector)
+    # Construct the right-hand side vector for the KKT system
+    rhs_vector = np.concatenate([-previous_gradiant, np.zeros(num_constraints)])
 
-    # Extract the solution relevant to the direction in the primal space
-    direction = solution[:previous_hessian.shape[0]]
+    # Solve the KKT system
+    solution = np.linalg.solve(kkt_matrix, rhs_vector)
 
-    return direction
+    # Only the part of the solution corresponding to the primal variables is needed
+    return solution[:A.shape[1]]
 
 
-def find_direction_no_eq(previous_hessian, previous_gradient):
-    return np.linalg.solve(previous_hessian, -previous_gradient)
+def find_direction_no_eq(previous_hassian, previous_gradiant):
+    return np.linalg.solve(previous_hassian, -previous_gradiant)
 
 
 def find_direction(previous_hassian, A, previous_gradiant):
@@ -102,27 +89,35 @@ def find_direction(previous_hassian, A, previous_gradiant):
     return find_direction_no_eq(previous_hassian, previous_gradiant)
  
 
-def wolfe_condition_with_backtracking(f, x, val, gradient, direction, ineq_constraints, t, alpha=1.0, beta=0.5, max_iter=100):
-    step_length = 0.01
-    curr_val, _, _ = f(x + step_length * direction)  # Assuming f returns a tuple with at least three items
+def wolfe_condition_with_backtracking(f, x, val, gradient, direction, max_iter=10):
+    alpha = 1.0
+    f_x_0 = val
+    dot_grad = np.dot(gradient, direction)
 
-    iteration = 0
-    while iteration < max_iter:
-        if curr_val <= val + alpha * step_length * np.dot(gradient, direction):
-            break  # Condition met, exit the loop
-        step_length *= beta
-        curr_val, _, _ = f(x + step_length * direction)
-        iteration += 1
+    iter_count = 0
+    while iter_count < max_iter:
+        curr_val = f(x + alpha * direction)[0]  # Assuming f returns function value as the first element
 
-    return step_length
+        if curr_val <= f_x_0 + 0.01 * alpha * dot_grad:
+            return alpha
+
+        alpha *= 0.5
+        iter_count += 1
+
+        # Break if alpha becomes too small
+        if alpha < 1e-6:
+            break
+
+    return alpha
 
 
 def get_values_after_log_barrier(f, ineq_constraints, x0, t):
-    # Evaluate the original objective function at x0
     val, grad, hass = f(x0)
-    # Evaluate the log barrier contribution at x0
+
+    # Get the logarithmic barrier terms for the inequality constraints at x0
     log_f, log_g, log_h = log_barrier(ineq_constraints, x0)
-    # Combine the original function evaluation with the log barrier scaled by t
+
+    # Combine the original function's outputs with the barrier terms
     prev_f = t * val + log_f
     prev_grad = t * grad + log_g
     prev_hass = t * hass + log_h

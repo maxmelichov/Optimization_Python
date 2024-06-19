@@ -15,7 +15,7 @@ class TestMinimize(unittest.TestCase):
         A = np.array([1, 1, 1]).reshape(1, 3)
         x0 = np.array([0.1, 0.2, 0.7])
 
-        final_candidate, final_obj, history = interior_pt(qp_function, ineq_constraints_qp, A, 0, x0)
+        final_candidate, final_obj, history = interior_pt(qp_function, ineq_constraints_qp, A, x0)
         
         qp_ineq_constraints_at_final = [c(final_candidate)[0] for c in ineq_constraints_qp]
 
@@ -35,7 +35,7 @@ class TestMinimize(unittest.TestCase):
         x0 = np.array([0.5, 0.75])
 
         # Perform the optimization
-        final_candidate, final_obj, history = interior_pt(lp_function, ineq_constraints_lp, A, 0, x0)
+        final_candidate, final_obj, history = interior_pt(lp_function, ineq_constraints_lp, A, x0)
 
         # Check inequality constraints at the final point
         lp_ineq_constraints_at_final = [c(final_candidate)[0] for c in ineq_constraints_lp]
