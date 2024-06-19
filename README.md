@@ -57,11 +57,15 @@ A classic optimization test function used to evaluate convergence properties of 
   - ![Rosenbrock Function Iterations](plots/Rosenbrock/iteration.png)
 
 ## Discussion
-Newton's Method typically achieves faster convergence leveraging second-order information, albeit at the cost of higher computational demand and challenges with nearly singular Hessians. Gradient Descent, a first-order method, provides more consistent results across a broader range of conditions, though it may be slower, requiring more iterations for comparable precision.
+Newton's Method typically achieves faster convergence by leveraging second-order information, albeit at the cost of higher computational demand and challenges with nearly singular Hessians. Gradient Descent, a first-order method, provides more consistent results across a broader range of conditions, though it may be slower, requiring more iterations for comparable precision.
 
 
 
-Home work 2: 
+
+
+
+
+# Homework 2: 
 
 Image 1: Iteration-wise Objective Values for LP
 This graph shows the objective values at each iteration of a linear programming (LP) algorithm. The y-axis represents the objective value, and the x-axis shows the iteration number. The rapid decrease between iterations 3 and 4 suggests a significant improvement in the objective value, followed by stabilization, indicating that the algorithm has likely converged to an optimal solution.
