@@ -58,3 +58,27 @@ A classic optimization test function used to evaluate convergence properties of 
 
 ## Discussion
 Newton's Method typically achieves faster convergence leveraging second-order information, albeit at the cost of higher computational demand and challenges with nearly singular Hessians. Gradient Descent, a first-order method, provides more consistent results across a broader range of conditions, though it may be slower, requiring more iterations for comparable precision.
+
+
+
+Home work 2: 
+
+Image 1: Iteration-wise Objective Values for LP
+This graph shows the objective values at each iteration of a linear programming (LP) algorithm. The y-axis represents the objective value, and the x-axis shows the iteration number. The rapid decrease between iterations 3 and 4 suggests a significant improvement in the objective value, followed by stabilization, indicating that the algorithm has likely converged to an optimal solution.
+
+![Image 1](plots_hw2/Figure_1.png)
+
+Image 2: Algorithm Path within LP Feasible Region
+This plot displays the path taken by the algorithm within the feasible region of the LP problem. Various constraints (y = 0, y = 1, x = 2, y = -x + 1) define the feasible region. The graph traces the algorithm's progression from an initial point to the final candidate solution, visually representing how the algorithm navigates through the feasible space to optimize the objective function.
+
+![Image 2](plots_hw2/Figure_2.png)
+
+Image 3: Iteration-wise Objective Values for QP
+Similar to the first image, this graph shows the objective values per iteration for a quadratic programming (QP) problem. The graph shows a continuous decrease in the objective value, indicating that the algorithm is effectively finding lower values of the objective function, moving towards the minimum.
+
+![Image 3](plots_hw2/Figure_3.png)
+
+Image 4: Algorithm Path within QP Feasible Region
+This 3D plot illustrates the path of an optimization algorithm in a quadratic programming feasible region. The axes represent the variables of the QP problem (x, y, z), and the path is marked leading to the final candidate solution. This visualization helps in understanding how the algorithm explores the multidimensional feasible space to arrive at an optimal solution.
+
+![Image 4](plots_hw2/Figure_4.png)
