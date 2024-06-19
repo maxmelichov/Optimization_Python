@@ -67,22 +67,31 @@ Newton's Method typically achieves faster convergence by leveraging second-order
 
 # Homework 2: 
 
-Image 1: Iteration-wise Objective Values for LP
-This graph shows the objective values at each iteration of a linear programming (LP) algorithm. The y-axis represents the objective value, and the x-axis shows the iteration number. The rapid decrease between iterations 3 and 4 suggests a significant improvement in the objective value, followed by stabilization, indicating that the algorithm has likely converged to an optimal solution.
+## Linear Programming (LP):
+Iteration-wise Objective Values:
+
+The graph shows a significant decrease in the objective values of the LP problem over iterations, starting at approximately -1.25 and steadily dropping to around -3.0 by the tenth iteration. This indicates an effective minimization process.
+
+### Algorithm Path within LP Feasible Region:
+The feasible region is defined by various linear constraints, with the algorithm's path displayed as a black line converging towards the final candidate, highlighted by a yellow dot. This path suggests a careful navigation through the constraints to arrive at an optimal or near-optimal solution.
+The final candidate position is roughly at coordinates (1.99, 0.99).
+The objective function value at the final candidate is approximately -2.99.
+The inequality constraints at this point are satisfactorily close to zero, showing adherence to the boundaries defined by the problem.
+
 
 ![Image 1](plots_hw2/Figure_1.png)
-
-Image 2: Algorithm Path within LP Feasible Region
-This plot displays the path taken by the algorithm within the feasible region of the LP problem. Various constraints (y = 0, y = 1, x = 2, y = -x + 1) define the feasible region. The graph traces the algorithm's progression from an initial point to the final candidate solution, visually representing how the algorithm navigates through the feasible space to optimize the objective function.
-
 ![Image 2](plots_hw2/Figure_2.png)
 
-Image 3: Iteration-wise Objective Values for QP
-Similar to the first image, this graph shows the objective values per iteration for a quadratic programming (QP) problem. The graph shows a continuous decrease in the objective value, indicating that the algorithm is effectively finding lower values of the objective function, moving towards the minimum.
+## Quadratic Programming (QP):
+Iteration-wise Objective Values:
+
+Similar to the LP graph, this plot shows a swift and significant decrease from around 2.8 to just above 1.6. The smooth decline suggests the quadratic objective function is being minimized effectively.
+
+### Algorithm Path within QP Feasible Region:
+This plot is in three dimensions reflecting the complex nature of the QP feasible region. The blue path marks the algorithm’s journey, which explores the region before settling at the final candidate position, denoted by a yellow dot.
+The final candidate coordinates are roughly (0.50, 0.50, 0.001).
+The objective function value at this point is about 1.50.
+Both the inequality and equality constraints are very close to being satisfied at the solution point, indicating that the solution is feasible under the problem's requirements.
 
 ![Image 3](plots_hw2/Figure_3.png)
-
-Image 4: Algorithm Path within QP Feasible Region
-This 3D plot illustrates the path of an optimization algorithm in a quadratic programming feasible region. The axes represent the variables of the QP problem (x, y, z), and the path is marked leading to the final candidate solution. This visualization helps in understanding how the algorithm explores the multidimensional feasible space to arrive at an optimal solution.
-
 ![Image 4](plots_hw2/Figure_4.png)
