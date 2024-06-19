@@ -60,7 +60,7 @@ def log_barrier(inequality_constraints, x0):
         f_value, gradient, hessian = constraint(x0)
         
         # Update the log barrier function value
-        log_barrier_value += math.log(-f_value)
+        log_barrier_value += np.log(-f_value)
         # Update the gradient of the log barrier
         log_barrier_gradient += gradient / -f_value
         
@@ -102,8 +102,8 @@ def find_direction(previous_hassian, A, previous_gradiant):
     return find_direction_no_eq(previous_hassian, previous_gradiant)
  
 
-def wolfe_condition_with_backtracking(f, x, val, gradient, direction, ineq_constraints, t, alpha=0.01, beta=0.5, max_iter=10):
-    step_length = 1
+def wolfe_condition_with_backtracking(f, x, val, gradient, direction, ineq_constraints, t, alpha=1.0, beta=0.5, max_iter=100):
+    step_length = 0.01
     curr_val, _, _ = f(x + step_length * direction)  # Assuming f returns a tuple with at least three items
 
     iteration = 0
