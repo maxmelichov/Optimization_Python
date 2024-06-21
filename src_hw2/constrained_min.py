@@ -20,7 +20,7 @@ def interior_pt(f, ineq_constraints, eq_constraints_mat, x0):
     while (num_of_constraints / t) > 1e-8:
         for i in range(10):
             dir = find_direction(prev_hass, eq_constraints_mat, prev_grad)
-            step_len = wolfe_condition_with_backtracking(f, prev_x0, prev_f, prev_grad, dir)
+            step_len = wolfe_condition_with_backtracking(f, prev_x0, prev_f, prev_grad, dir, ineq_constraints, t)
             next_x0 = prev_x0 + dir * step_len
             
             next_f, next_grad, next_hass = get_values_after_log_barrier(f, ineq_constraints, next_x0, t)
@@ -89,26 +89,17 @@ def find_direction(previous_hassian, A, previous_gradiant):
     return find_direction_no_eq(previous_hassian, previous_gradiant)
  
 
-def wolfe_condition_with_backtracking(f, x, val, gradient, direction, max_iter=10):
-    alpha = 1.0
-    f_x_0 = val
-    dot_grad = np.dot(gradient, direction)
+def wolfe_condition_with_backtracking(f, x, val, gradient, direction, ineq_constraints, t, alpha=0.01, beta=0.5, max_iter=10):
+    step_length = 1
+    curr_val, _, _ = f(x + step_length * direction)
 
-    iter_count = 0
-    while iter_count < max_iter:
-        curr_val = f(x + alpha * direction)[0]  # Assuming f returns function value as the first element
+    iter = 0
+    while iter < max_iter and curr_val > val + alpha * step_length * gradient.dot(direction):
+        step_length *= beta
+        curr_val, _, _ = f(x + step_length * direction)
+        iter += 1
 
-        if curr_val <= f_x_0 + 0.01 * alpha * dot_grad:
-            return alpha
-
-        alpha *= 0.5
-        iter_count += 1
-
-        # Break if alpha becomes too small
-        if alpha < 1e-6:
-            break
-
-    return alpha
+    return step_length
 
 
 def get_values_after_log_barrier(f, ineq_constraints, x0, t):
